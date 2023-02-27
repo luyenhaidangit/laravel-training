@@ -1,29 +1,19 @@
-<!DOCTYPE html>
-<html>
+<?php
+// Thêm một nhân viên mới vào danh sách
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['name'];
+    $birthday = $_POST['birthday'];
+    $address = $_POST['address'];
+    $room = $_POST['room'];
+    $job = $_POST['job'];
+    $employee_info = "{$name}#{$birthday}#{$address}#{$room}#{$job}";
 
-<head>
-    <title>Hiển thị nhân viên</title>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-</head>
+    $file = fopen("class-exercise-270206.txt", "a") or die("Không thể mở file!");
+    fwrite($file, "\n" . $employee_info);
+    fclose($file);
+}
 
-<body class="p-4">
-    Tìm kiếm nhân viên
-
-   
-
-    <br/>
-
-    
-
-
-
-
-
-    <?php
-
-
+// Đọc thông tin các nhân viên từ file
 $file = fopen("class-exercise-270206.txt", "r") or die("Không thể mở file!");
 $content = array();
 while (!feof($file)) {
@@ -33,24 +23,29 @@ while (!feof($file)) {
     }
 }
 fclose($file);
-
-
 ?>
 
+<!-- Form để thêm một nhân viên mới -->
+<form method="post">
+    <label for="name">Tên:</label>
+    <input type="text" id="name" name="name" required>
 
+    <label for="birthday">Ngày sinh:</label>
+    <input type="text" id="birthday" name="birthday" required>
 
+    <label for="address">Địa chỉ:</label>
+    <input type="text" id="address" name="address" required>
 
-<form name='form' method="POST">
-<div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">Tên</label>
-  <input name='name' type="text" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-</div>
-<div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">Địa chỉ</label>
-  <input name='andress' type="text" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-</div>
-    </form>
+    <label for="room">Phòng làm việc:</label>
+    <input type="text" id="room" name="room" required>
 
+    <label for="job">Chức vụ:</label>
+    <input type="text" id="job" name="job" required>
+
+    <button type="submit">Thêm nhân viên</button>
+</form>
+
+<!-- Hiển thị danh sách nhân viên -->
 <table class="table">
   <thead>
     <tr>
@@ -64,39 +59,12 @@ fclose($file);
   </thead>
   <tbody>
     <?php 
-
-        $file = fopen("class-exercise-270209.txt", "r") or die("Không thể mở file!");
-            $content = array();
-            while (!feof($file)) {
-            $line = trim(fgets($file));
-            if ($line !== "") {
-                $content[] = $line;
-                }
-            }
-            fclose($file);
-
-            // kiểm tra nếu form đã được submit thì tìm kiếm sản phẩm
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $search_text = $_POST['select'];
-                echo $search_text;
-                $result = array_filter($content, function($line) use ($search_text) {
-                    $values = explode("#", $line);
-                    $andress = $values[2];
-                    // echo $andress;
-                    // return $andress === $search_text;
-                    return stripos($andress, $search_text) !== false;
-                });
-            } else {
-                $result = $content;
-            }
-
-
         $index = 1;
-        foreach ($result as $line) {
+        foreach ($content as $line) {
             $values = explode("#", $line);
             $name = $values[0];
             $birthday = $values[1];
-            $andress = $values[2];
+            $address = $values[2];
             $room = $values[3];
             $job = $values[4];
             echo "<tr>";
@@ -112,21 +80,3 @@ fclose($file);
     ?>
   </tbody>
 </table>
-
-
-
-
-
-
-</body>
-<style>
-    .img{
-        height:300px;
-        width: 300px;
-    }
-    
-</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-
-</html>
