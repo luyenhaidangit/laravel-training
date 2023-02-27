@@ -33,61 +33,48 @@
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
 
- <?php 
 
-        $file = fopen("class-exercise-270205.txt", "r") or die("Không thể mở file!");
-        $content = array();
-        while (!feof($file)) {
+ <?php 
+            $file = fopen("class-exercise-270205.txt", "r") or die("Không thể mở file!");
+            $content = array();
+            while (!feof($file)) {
             $line = trim(fgets($file));
             if ($line !== "") {
                 $content[] = $line;
-            }
-        }
-        fclose($file);
-
-        $result = [];
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $search_text = $_POST['search_text'];
-                echo $search_text;
-                
-
-                foreach ($content as $item) {
-                    $values = explode('#', $item);
-                    $name = $values[0];
-                    // if (isset($values[0]) && strpos($values[0], $search_text) !== false) {
-                    //     $result[] = $item;
-                    // }
-                    if (strpos($name, $search_text) !== false) {
-                        $result[] = $item;
-                    }
                 }
+            }
+            fclose($file);
 
-                $content = $result;
-            } else{
-                $index = 0;
-        foreach ($content as $line) {
-            $values = explode("#", $line);
-            $name = $values[0];
-            $image = $values[1];
-            $price = $values[2];
-            $description = $values[3];
-            echo "<div class='col'>";
-            echo "<div class='card'>";
-            echo "<img src='{$image}' class='card-img-top' alt='ok'>";
-            echo "<div class='card-body'>";
-            echo "<h5 class='card-title'>{$name}</h5>";
-            echo "<p class='card-text text-danger'>Giá {$price}</p>";
-            echo "<p class='card-text'>{$description}</p>";
-            echo "</div>";
-            echo "</div>";
-            echo "</div>";
-        }
+            // kiểm tra nếu form đã được submit thì tìm kiếm sản phẩm
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $search_text = $_POST['search_text'];
+                $result = array_filter($content, function($line) use ($search_text) {
+                    return stripos($line, $search_text) !== false;
+                });
+            } else {
+                $result = $content;
             }
 
+            // hiển thị các sản phẩm được tìm thấy
+            foreach ($result as $line) {
+                $values = explode("#", $line);
+                $name = $values[0];
+                $image = $values[1];
+                $price = $values[2];
+                $description = $values[3];
+                echo "<div class='col'>";
+                echo "<div class='card'>";
+                echo "<img src='{$image}' class='card-img-top' alt='ok'>";
+                echo "<div class='card-body'>";
+                echo "<h5 class='card-title'>{$name}</h5>";
+                echo "<p class='card-text text-danger'>Giá {$price}</p>";
+                echo "<p class='card-text'>{$description}</p>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+            }
+        ?>
 
-
-        
-    ?>
 </div>
 
 
