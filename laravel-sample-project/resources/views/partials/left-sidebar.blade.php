@@ -15,6 +15,13 @@
                                 </a>
                             </li>
 
+                             <li>
+                                <a href="{{route('productcategories.index')}}" class=" waves-effect">
+                                    <i class="ri-calendar-2-line"></i>
+                                    <span>Loại sản phẩm</span>
+                                </a>
+                            </li>
+
                             <li>
                                 <a href="calendar.html" class=" waves-effect">
                                     <i class="ri-calendar-2-line"></i>
